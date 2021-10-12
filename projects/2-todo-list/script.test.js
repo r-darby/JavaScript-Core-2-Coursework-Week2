@@ -31,6 +31,7 @@ test("displays the initial list of todos", () => {
 
   expect(todoList).toHaveTextContent("Wash the dishes");
   expect(todoList).toHaveTextContent("Do the shopping");
+  expect([...page.window.document.querySelectorAll("li")].length).toBe(2);
 });
 
 test("each todo has a delete and tick icon", () => {
@@ -58,6 +59,7 @@ test("can add a new todo to the list", () => {
   userEvent.click(button);
 
   expect(todoList).toHaveTextContent("Do CYF coursework");
+  expect([...page.window.document.querySelectorAll("li")].length).toBe(3);
 });
 
 test("can strike through a todo when it is completed", () => {
