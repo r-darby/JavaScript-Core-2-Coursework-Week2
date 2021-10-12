@@ -93,6 +93,47 @@ describe("Mandatory challenges", () => {
   });
 });
 
+describe("Advanced", () => {
+  test("can remove all completed todos", () => {
+    const todoList = page.window.document.querySelector("#todo-list");
+    const button = page.window.document.querySelector(".btn");
+    const input = page.window.document.querySelector("#todoInput");
+
+    userEvent.type(input, "Do CYF coursework");
+    userEvent.click(button);
+
+    userEvent.clear(input);
+    userEvent.type(input, "Make a sandwich");
+    userEvent.click(button);
+
+    userEvent.clear(input);
+    userEvent.type(input, "Take a break");
+    userEvent.click(button);
+
+    const tickIcon2 = page.window.document.querySelector(
+      "li:nth-child(2) i.fa-check"
+    );
+    userEvent.click(tickIcon2);
+    const tickIcon4 = page.window.document.querySelector(
+      "li:nth-child(4) i.fa-check"
+    );
+    userEvent.click(tickIcon4);
+
+    const removeAllCompletedButton = page.window.document.querySelector(
+      "#remove-all-completed"
+    );
+    userEvent.click(removeAllCompletedButton);
+
+    expect([...page.window.document.querySelectorAll("li")].length).toBe(3);
+    expect(todoList).toHaveTextContent("Wash the dishes");
+    expect(todoList).toHaveTextContent("Do CYF coursework");
+    expect(todoList).toHaveTextContent("Take a break");
+
+    expect(todoList).not.toHaveTextContent("Do the shopping");
+    expect(todoList).not.toHaveTextContent("Make a sandwich");
+  });
+});
+
 afterEach(() => {
   jest.useRealTimers();
   page = null;
