@@ -26,7 +26,7 @@ beforeEach(async () => {
   });
 });
 
-describe("Mandatory challenges", () => {
+describe("Mandatory tasks", () => {
   test("displays the initial list of todos", () => {
     const todoList = page.window.document.querySelector("#todo-list");
 
@@ -73,6 +73,22 @@ describe("Mandatory challenges", () => {
     });
   });
 
+  test("can undo a strikethrough on a todo", () => {
+    const li = page.window.document.querySelector("li");
+    const tickIcon = page.window.document.querySelector("li i");
+    userEvent.click(tickIcon);
+
+    expect(li).toHaveStyle({
+      textDecoration: "line-through",
+    });
+
+    userEvent.click(tickIcon);
+
+    expect(li).not.toHaveStyle({
+      textDecoration: "line-through",
+    });
+  });
+
   test("can delete a todo from the list", () => {
     const todoList = page.window.document.querySelector("#todo-list");
     const button = page.window.document.querySelector(".btn");
@@ -93,7 +109,7 @@ describe("Mandatory challenges", () => {
   });
 });
 
-describe("Advanced", () => {
+describe("Advanced tasks", () => {
   test("can remove all completed todos", () => {
     const todoList = page.window.document.querySelector("#todo-list");
     const button = page.window.document.querySelector(".btn");
