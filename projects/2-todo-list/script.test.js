@@ -1,9 +1,7 @@
-
-
 const path = require("path");
 const { JSDOM } = require("jsdom");
 const { expect } = require("@jest/globals");
-const {default: userEvent} = require('@testing-library/user-event')
+const { default: userEvent } = require("@testing-library/user-event");
 
 let page = null;
 
@@ -12,8 +10,6 @@ beforeEach(async () => {
     resources: "usable",
     runScripts: "dangerously",
   });
-
-//   jest.useFakeTimers();
 
   // do this so students can use element.innerText which jsdom does not implement
   Object.defineProperty(page.window.HTMLElement.prototype, "innerText", {
@@ -30,62 +26,48 @@ beforeEach(async () => {
   });
 });
 
-test("displays the initial list of todos",() => {
+test("displays the initial list of todos", () => {
+  const todoList = page.window.document.querySelector("#todo-list");
 
-    const todoList = page.window.document.querySelector("#todo-list");
-    
-    expect(todoList).toHaveTextContent("Wash the dishes");
-    expect(todoList).toHaveTextContent("Do the shopping");
+  expect(todoList).toHaveTextContent("Wash the dishes");
+  expect(todoList).toHaveTextContent("Do the shopping");
 });
 
-
-test('each todo has a delete and tick icon',() => {
+test("each todo has a delete and tick icon", () => {
   const listElements = page.window.document.querySelectorAll("li");
 
-  [...listElements].forEach((_,index) => {
-    const tickIcon = page.window.document.querySelector(`li:nth-child(${index + 1}) i.fa-check`);
-    const binIcon = page.window.document.querySelector(`li:nth-child(${index + 1}) i.fa-trash`);
+  [...listElements].forEach((_, index) => {
+    const tickIcon = page.window.document.querySelector(
+      `li:nth-child(${index + 1}) i.fa-check`
+    );
+    const binIcon = page.window.document.querySelector(
+      `li:nth-child(${index + 1}) i.fa-trash`
+    );
 
     expect(tickIcon).toBeInTheDocument();
-    expect(binIcon).toBeInTheDocument();  
+    expect(binIcon).toBeInTheDocument();
   });
-
 });
 
-test('can add a new todo to the list',() => {
+test("can add a new todo to the list", () => {
+  const todoList = page.window.document.querySelector("#todo-list");
+  const button = page.window.document.querySelector(".btn");
+  const input = page.window.document.querySelector("#todoInput");
 
-    const todoList = page.window.document.querySelector('#todo-list');
-    const button = page.window.document.querySelector('.btn');
-    const input = page.window.document.querySelector("#todoInput");
+  userEvent.type(input, "Do CYF coursework");
+  userEvent.click(button);
 
-    userEvent.type(input,'Do CYF coursework');
-    userEvent.click(button);
-
-    expect(todoList).toHaveTextContent('Do CYF coursework');
+  expect(todoList).toHaveTextContent("Do CYF coursework");
 });
 
-test("can strike through a todo when it is completed",() => {
+test("can strike through a todo when it is completed", () => {
+  const li = page.window.document.querySelector("li");
+  const tickIcon = page.window.document.querySelector("li i");
+  userEvent.click(tickIcon);
 
-    /*
- <li
-                class="list-group-item d-flex justify-content-between align-items-center"
-s>
-                Wash the dishes
-                <span class="badge bg-primary rounded-pill">
-                  <!-- each of these <i> tags will need an event listener when we create them in Javascript -->
-                  <i class="fa fa-check" aria-hidden="true"></i>
-                  <i class="fa fa-trash" aria-hidden="true"></i>
-                </span>
-              </li>
-    */
-    const li = page.window.document.querySelector('li');
-    const tickIcon = page.window.document.querySelector('li i');
-    userEvent.click(tickIcon);
-
-    expect(li).toHaveStyle({
-        textDecoration: 'line-through'
-    });
-
+  expect(li).toHaveStyle({
+    textDecoration: "line-through",
+  });
 });
 
 afterEach(() => {
