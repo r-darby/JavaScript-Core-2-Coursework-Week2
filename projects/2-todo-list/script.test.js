@@ -26,49 +26,70 @@ beforeEach(async () => {
   });
 });
 
-test("displays the initial list of todos", () => {
-  const todoList = page.window.document.querySelector("#todo-list");
+describe("Mandatory challenges", () => {
+  test("displays the initial list of todos", () => {
+    const todoList = page.window.document.querySelector("#todo-list");
 
-  expect(todoList).toHaveTextContent("Wash the dishes");
-  expect(todoList).toHaveTextContent("Do the shopping");
-  expect([...page.window.document.querySelectorAll("li")].length).toBe(2);
-});
-
-test("each todo has a delete and tick icon", () => {
-  const listElements = page.window.document.querySelectorAll("li");
-
-  [...listElements].forEach((_, index) => {
-    const tickIcon = page.window.document.querySelector(
-      `li:nth-child(${index + 1}) i.fa-check`
-    );
-    const binIcon = page.window.document.querySelector(
-      `li:nth-child(${index + 1}) i.fa-trash`
-    );
-
-    expect(tickIcon).toBeInTheDocument();
-    expect(binIcon).toBeInTheDocument();
+    expect(todoList).toHaveTextContent("Wash the dishes");
+    expect(todoList).toHaveTextContent("Do the shopping");
+    expect([...page.window.document.querySelectorAll("li")].length).toBe(2);
   });
-});
 
-test("can add a new todo to the list", () => {
-  const todoList = page.window.document.querySelector("#todo-list");
-  const button = page.window.document.querySelector(".btn");
-  const input = page.window.document.querySelector("#todoInput");
+  test("each todo has a delete and tick icon", () => {
+    const listElements = page.window.document.querySelectorAll("li");
 
-  userEvent.type(input, "Do CYF coursework");
-  userEvent.click(button);
+    [...listElements].forEach((_, index) => {
+      const tickIcon = page.window.document.querySelector(
+        `li:nth-child(${index + 1}) i.fa-check`
+      );
+      const binIcon = page.window.document.querySelector(
+        `li:nth-child(${index + 1}) i.fa-trash`
+      );
 
-  expect(todoList).toHaveTextContent("Do CYF coursework");
-  expect([...page.window.document.querySelectorAll("li")].length).toBe(3);
-});
+      expect(tickIcon).toBeInTheDocument();
+      expect(binIcon).toBeInTheDocument();
+    });
+  });
 
-test("can strike through a todo when it is completed", () => {
-  const li = page.window.document.querySelector("li");
-  const tickIcon = page.window.document.querySelector("li i");
-  userEvent.click(tickIcon);
+  test("can add a new todo to the list", () => {
+    const todoList = page.window.document.querySelector("#todo-list");
+    const button = page.window.document.querySelector(".btn");
+    const input = page.window.document.querySelector("#todoInput");
 
-  expect(li).toHaveStyle({
-    textDecoration: "line-through",
+    userEvent.type(input, "Do CYF coursework");
+    userEvent.click(button);
+
+    expect(todoList).toHaveTextContent("Do CYF coursework");
+    expect([...page.window.document.querySelectorAll("li")].length).toBe(3);
+  });
+
+  test("can strike through a todo when it is completed", () => {
+    const li = page.window.document.querySelector("li");
+    const tickIcon = page.window.document.querySelector("li i");
+    userEvent.click(tickIcon);
+
+    expect(li).toHaveStyle({
+      textDecoration: "line-through",
+    });
+  });
+
+  test("can delete a todo from the list", () => {
+    const todoList = page.window.document.querySelector("#todo-list");
+    const button = page.window.document.querySelector(".btn");
+    const input = page.window.document.querySelector("#todoInput");
+
+    userEvent.type(input, "Do CYF coursework");
+    userEvent.click(button);
+
+    expect(todoList).toHaveTextContent("Do CYF coursework");
+    expect([...page.window.document.querySelectorAll("li")].length).toBe(3);
+
+    const binIcon = page.window.document.querySelector(
+      "li:nth-child(3) i.fa-trash"
+    );
+    userEvent.click(binIcon);
+
+    expect(todoList).not.toHaveTextContent("Do CYF coursework");
   });
 });
 
