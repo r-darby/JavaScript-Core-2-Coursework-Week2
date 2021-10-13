@@ -29,16 +29,17 @@ beforeEach(async () => {
 describe("Mandatory tasks", () => {
   test("displays the initial list of todos", () => {
     const todoList = page.window.document.querySelector("#todo-list");
+    const listItems = [...page.window.document.querySelectorAll("li")];
 
     expect(todoList).toHaveTextContent("Wash the dishes");
     expect(todoList).toHaveTextContent("Do the shopping");
-    expect([...page.window.document.querySelectorAll("li")].length).toBe(2);
+    expect(listItems.length).toBe(2);
   });
 
   test("each todo has a delete and tick icon", () => {
-    const listElements = page.window.document.querySelectorAll("li");
+    const listItems = [...page.window.document.querySelectorAll("li")];
 
-    [...listElements].forEach((_, index) => {
+    listItems.forEach((_, index) => {
       const tickIcon = page.window.document.querySelector(
         `li:nth-child(${index + 1}) i.fa-check`
       );
@@ -60,7 +61,9 @@ describe("Mandatory tasks", () => {
     userEvent.click(button);
 
     expect(todoList).toHaveTextContent("Do CYF coursework");
-    expect([...page.window.document.querySelectorAll("li")].length).toBe(3);
+
+    const listItems = [...page.window.document.querySelectorAll("li")];
+    expect(listItems.length).toBe(3);
   });
 
   test("can strike through a todo when it is completed", () => {
@@ -98,7 +101,8 @@ describe("Mandatory tasks", () => {
     userEvent.click(button);
 
     expect(todoList).toHaveTextContent("Do CYF coursework");
-    expect([...page.window.document.querySelectorAll("li")].length).toBe(3);
+    const listItems = [...page.window.document.querySelectorAll("li")];
+    expect(listItems.length).toBe(3);
 
     const binIcon = page.window.document.querySelector(
       "li:nth-child(3) i.fa-trash"
@@ -140,7 +144,8 @@ describe("Advanced tasks", () => {
     );
     userEvent.click(removeAllCompletedButton);
 
-    expect([...page.window.document.querySelectorAll("li")].length).toBe(3);
+    const listItems = [...page.window.document.querySelectorAll("li")];
+    expect(listItems.length).toBe(3);
     expect(todoList).toHaveTextContent("Wash the dishes");
     expect(todoList).toHaveTextContent("Do CYF coursework");
     expect(todoList).toHaveTextContent("Take a break");
@@ -151,6 +156,5 @@ describe("Advanced tasks", () => {
 });
 
 afterEach(() => {
-  jest.useRealTimers();
   page = null;
 });
