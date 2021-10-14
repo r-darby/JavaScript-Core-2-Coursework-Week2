@@ -31,9 +31,9 @@ describe("Mandatory tasks", () => {
     const todoList = page.window.document.querySelector("#todo-list");
     const listItems = [...page.window.document.querySelectorAll("li")];
 
-    expect(todoList).toHaveTextContent("Wash the dishes");
-    expect(todoList).toHaveTextContent("Do the shopping");
     expect(listItems.length).toBe(2);
+    expect(listItems[0]).toHaveTextContent("Wash the dishes");
+    expect(listItems[1]).toHaveTextContent("Do the shopping");
   });
 
   test("each todo has a delete and tick icon", () => {
