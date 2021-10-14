@@ -39,13 +39,9 @@ describe("Mandatory tasks", () => {
   test("each todo has a delete and tick icon", () => {
     const listItems = [...page.window.document.querySelectorAll("li")];
 
-    listItems.forEach((_, index) => {
-      const tickIcon = page.window.document.querySelector(
-        `li:nth-child(${index + 1}) i.fa-check`
-      );
-      const binIcon = page.window.document.querySelector(
-        `li:nth-child(${index + 1}) i.fa-trash`
-      );
+    listItems.forEach(li => {
+      const tickIcon = li.querySelector("i.fa-check");
+      const binIcon = li.querySelector("i.fa-trash");
 
       expect(tickIcon).toBeInTheDocument();
       expect(binIcon).toBeInTheDocument();
